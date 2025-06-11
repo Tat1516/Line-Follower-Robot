@@ -1,0 +1,94 @@
+void setup() {
+  for (int i = 2; i <= 9; i++) pinMode(i, INPUT);
+  pinMode(A5, OUTPUT);
+  pinMode(A4, OUTPUT);
+  pinMode(A3, OUTPUT);
+  pinMode(A2, OUTPUT); 
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+}
+
+void forward() {
+  digitalWrite(A5, HIGH); digitalWrite(A4, LOW);
+  digitalWrite(A3, HIGH); digitalWrite(A2, LOW);
+  analogWrite(10, 75); analogWrite(11, 75);
+}
+void slight_right() {
+  digitalWrite(A5, LOW); digitalWrite(A4, HIGH);
+  digitalWrite(A3, HIGH); digitalWrite(A2, LOW);
+  analogWrite(10, 65); analogWrite(11, 75);
+}
+void high_right() {
+  digitalWrite(A5, LOW); digitalWrite(A4, HIGH);
+  digitalWrite(A3, HIGH); digitalWrite(A2, LOW);
+  analogWrite(10, 70); analogWrite(11, 75);
+}
+void sharp_right() {
+  digitalWrite(A5, LOW); digitalWrite(A4, HIGH);
+  digitalWrite(A3, HIGH); digitalWrite(A2, LOW);
+  analogWrite(10, 70); analogWrite(11, 70);  
+}
+void slight_left() {
+  digitalWrite(A5, HIGH); digitalWrite(A4, LOW);
+  digitalWrite(A3, LOW); digitalWrite(A2, HIGH);
+  analogWrite(10, 75); analogWrite(11, 65); 
+}
+void high_left() {
+  digitalWrite(A5, HIGH); digitalWrite(A4, LOW);
+  digitalWrite(A3, LOW); digitalWrite(A2, HIGH);
+  analogWrite(10, 75); analogWrite(11, 70); 
+}
+void sharp_left() {
+  digitalWrite(A5, HIGH); digitalWrite(A4, LOW);
+  digitalWrite(A3, LOW); digitalWrite(A2, HIGH);
+  analogWrite(10, 75); analogWrite(11, 75); 
+}
+void stop() {
+  digitalWrite(A5, LOW); digitalWrite(A4, LOW);
+  digitalWrite(A3, LOW); digitalWrite(A2, LOW);
+  analogWrite(10, 0); analogWrite(11, 0); 
+}
+void back() {
+  digitalWrite(A5, LOW); digitalWrite(A4, HIGH);
+  digitalWrite(A3, LOW); digitalWrite(A2, HIGH);
+  analogWrite(10, 65); analogWrite(11, 65);
+}
+
+void loop() {
+  // Read sensors into variables for clarity
+  int s[8];
+  for (int i = 0; i < 8; i++) s[i] = digitalRead(i + 2);
+
+  // Logic: Most specific to least specific
+  if (s[0] && s[1] && s[2] && s[3] && s[4] && s[5] && s[6] && s[7]) {
+    forward();
+  }
+  else if (s[3] && s[2]) {
+    slight_left();   
+  }
+  else if (s[1] && s[0]) {
+    high_left();   
+  }
+  else if (s[3] && s[2] && s[1] && s[0]) {
+    sharp_left();
+  }
+  else if (s[4] && s[5]) {
+    slight_right();
+  }
+  else if (s[5] && s[6]) {
+    high_right();
+  }
+  else if (s[4] && s[5] && s[6] && s[7]) {
+    sharp_right();
+  }
+  else if (!s[0] && !s[1] && !s[2] && !s[3] && !s[4] && !s[5] && !s[6] && !s[7]) {
+    back();  
+  }
+  // Uncomment to enable stop when all sensors are HIGH
+  // else if (s[0] && s[1] && s[2] && s[3] && s[4] && s[5] && s[6] && s[7]) {
+  //   stop();
+  // }
+  else if (s[3] && s[4]) {
+    forward();
+  }
+}
